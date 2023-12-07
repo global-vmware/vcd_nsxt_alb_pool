@@ -10,18 +10,20 @@ terraform {
 }
 
 data "vcd_vdc_group" "dcgroup" {
+  org       = var.vdc_org_name
   name      = var.vdc_group_name
 }
 
 data "vcd_nsxt_edgegateway" "edge_gateway" {
-  org      = var.vdc_org_name
-  owner_id = data.vcd_vdc_group.dcgroup.id
-  name     = var.vdc_edge_name
+  org       = var.vdc_org_name
+  owner_id  = data.vcd_vdc_group.dcgroup.id
+  name      = var.vdc_edge_name
 }
 
 data "vcd_library_certificate" "ca-cert" {
-  for_each = var.ca_certificate_name != "" ? { ca_cert = var.ca_certificate_name } : {}
-  alias    = each.value
+  org       = var.vdc_org_name
+  for_each  = var.ca_certificate_name != "" ? { ca_cert = var.ca_certificate_name } : {}
+  alias     = each.value
 }
 
 data "vcd_nsxt_ip_set" "ip-set" {
